@@ -1,94 +1,34 @@
-const express = require("express");
+import express from "express";
+import mongoose from 'mongoose'
 const app = express();
-const mongoose = require("mongoose");
 app.use(express.json());
-const cors = require("cors");
+import cors from "cors";
 app.use(cors());
 import dotenv from 'dotenv'
 dotenv.config();
-const bcrypt = require("bcryptjs");
-//app.set("view engine", "ejs"); //shows the html and javascript in node, instead of connecting to the UI
-app.use(express.urlencoded({ extended: false })); //passing data from backend to react
+import bcrypt from "bcryptjs";
+app.use(express.urlencoded({ extended: false })); 
+const router = express.Router();
 
-const jwt = require("jsonwebtoken");
-var nodemailer = require("nodemailer");
+import jwt from "jsonwebtoken";
+import  nodemailer from "nodemailer";
 
 //for forgot password, we particularly need the jwt secret, connect to the database and getting the users available in the database
 
 const JWT_SECRET = process.env.JWT
 
-const mongoUrl = process.env.DB
 
-  //connected to database or not
-mongoose
-  .connect(mongoUrl, {
-    useNewUrlParser: true,
-  })
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((e) => console.log(e));
-
-
-//import the schema UuserDetails
-require("./userDetails");
-
-
-//Register or sign up 
-/* const User = mongoose.model("UserInfo");
-app.post("/register", async (req, res) => {
-  const { fname, lname, email, password } = req.body;
-
-  const encryptedPassword = await bcrypt.hash(password, 10);
-  try {
-    const oldUser = await User.findOne({ email });
-
-    if (oldUser) {
-      return res.json({ error: "User Exists" });
-    }
-    await User.create({
-      fname,
-      lname,
-      email,
-      password: encryptedPassword,
-    });
-    res.send({ status: "ok" });
-  } catch (error) {
-    res.send({ status: "error" });
-  }
-}); */
-
-
-//sign in or login
-/* app.post("/login-user", async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.json({ error: "Invalid email or password" });
-  }
-  if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({ email: user.email }, JWT_SECRET);
-
-    if (res.status(201)) {
-      return res.json({ status: "ok", data: token });
-    } else {
-      return res.json({ error: "error" });
-    }
-  }
-  res.json({ status: "error", error: "Invalid email or password" });
-}); */
+const User = mongoose.model("User");
 
 
 //getting the data/email from the database
-app.post("/userData", async (req, res) => {
+
+router.post("/userData", async (req, res) => {
   const { token } = req.body;
   try {
     const user = jwt.verify(token, JWT_SECRET);
-    console.log(user);
-
-    const useremail = user.email;
-    User.findOne({ email: useremail })
+     const email = user.email;
+    User.findOne({ email: email })
       .then((data) => {
         res.send({ status: "ok", data: data });
       })
@@ -99,14 +39,7 @@ app.post("/userData", async (req, res) => {
 });
 
 
-app.listen(5000, () => {
-  console.log("Server Started");
-});
-
-
-
-
-app.post("/forgot-password", async (req, res) => {
+router.post("/", async (req, res) => {
   const { email } = req.body;
   try {
     const oldUser = await User.findOne({ email });
@@ -117,18 +50,18 @@ app.post("/forgot-password", async (req, res) => {
     const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
       expiresIn: "15m",
     });
-    const link = `http://localhost:5000/reset-password/${oldUser._id}/${token}`; //email sent to the user. Upon clicking, it redirects to reset-password 
+    const link = `http://localhost:5000/reset-password/${oldUser._id}/${token}`;
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.ME,
-        pass: process.env.PASS,
+        user: 'witsie101@gmail.com',
+        pass: 'zaftqbnuedacdirh',
       },
     });
 
     var mailOptions = {
-      from: process.env.ME,
-      to: process.env.USER,
+      from: 'witsie101@gmail.com',
+      to: email,
       subject: "Password Reset",
       text: link,
     };
@@ -144,8 +77,11 @@ app.post("/forgot-password", async (req, res) => {
   } catch (error) {}
 });
 
+
+export default router;
+
 //id and token are params, structure of the link   
-app.get("/reset-password/:id/:token", async (req, res) => {
+router.get("/reset-password/:id/:token", async (req, res) => {
   const { id, token } = req.params; //is the token and id of the user the same? 
   console.log(req.params);
   const oldUser = await User.findOne({ _id: id });
@@ -162,7 +98,7 @@ app.get("/reset-password/:id/:token", async (req, res) => {
   }
 });
 
-app.post("/reset-password/:id/:token", async (req, res) => {
+router.post("/reset-password/:id/:token", async (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body; //I can add an option to see if "Confirm Password" is same as password
 
