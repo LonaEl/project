@@ -80,7 +80,7 @@ const Home = () => {
 
 
 
-              <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+              <Button onChange={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {(

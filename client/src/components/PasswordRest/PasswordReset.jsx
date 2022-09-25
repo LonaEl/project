@@ -24,6 +24,7 @@ const PasswordReset = () => {
 
   
   const handleSubmit = async(e) => {
+    console.log(handleSubmit);
     e.preventDefault();
     try {
         const { data } = await axios.post(link, { password });

@@ -78,8 +78,6 @@ router.post("/", async (req, res) => {
 });
 
 
-export default router;
-
 //id and token are params, structure of the link   
 router.get("/", async (req, res) => {
   const { id, token } = req.params; //is the token and id of the user the same? 
@@ -128,3 +126,5 @@ router.post("/", async (req, res) => {
     res.json({ status: "Something Went Wrong" });
   }
 });
+
+export default router;
