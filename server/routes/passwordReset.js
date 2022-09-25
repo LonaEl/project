@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
     const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
       expiresIn: "15m",
     });
-    const link = `http://localhost:5000/reset-password/${oldUser._id}/${token}`;
+    const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -81,7 +81,7 @@ router.post("/", async (req, res) => {
 export default router;
 
 //id and token are params, structure of the link   
-router.get("/reset-password/:id/:token", async (req, res) => {
+router.get("/", async (req, res) => {
   const { id, token } = req.params; //is the token and id of the user the same? 
   console.log(req.params);
   const oldUser = await User.findOne({ _id: id });
@@ -98,7 +98,7 @@ router.get("/reset-password/:id/:token", async (req, res) => {
   }
 });
 
-router.post("/reset-password/:id/:token", async (req, res) => {
+router.post("/", async (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body; //I can add an option to see if "Confirm Password" is same as password
 

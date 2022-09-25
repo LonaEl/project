@@ -10,16 +10,17 @@ import Claim from './components/Claim/Claim';
 import Terms from './components/Terms/Terms';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import PasswordReset from './components/PasswordRest/PasswordReset';
+//import { useParams } from 'react-router-dom';
 
 
 
-/* import { useDispatch } from 'react-redux';
-to dispatch an action
- */
+
 
 const App = () => {
+  //const param = useParams();
   const user = JSON.parse(localStorage.getItem('profile'));
-  //const dispatch = useDispatch();
+    
+
 
   return (
     <BrowserRouter>

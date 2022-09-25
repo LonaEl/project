@@ -16,11 +16,13 @@ const PasswordReset = () => {
             setValidUrl(true)
         } catch (error) {
             setValidUrl(false)
+            
         }
-    };
+    }
     verifyUrl()
   }, [param, link]);
 
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
@@ -34,7 +36,7 @@ const PasswordReset = () => {
 
     return (
        <Fragment>
-        {validUrl ? (
+         {validUrl ? ( 
             <div>
                 <form onSubmit={handleSubmit} >
                     <h1>Create new password</h1>
@@ -47,9 +49,9 @@ const PasswordReset = () => {
                     />
                 </form>
             </div>
-        ) : (
+         ) : (
             <h1>404 Not Found</h1>
-        )}
+         )}
        </Fragment>
     )
 };

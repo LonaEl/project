@@ -11,6 +11,7 @@ import postRoutes from './routes/posts.js';
 import userRouter from "./routes/user.js";
 import claimRouter from "./routes/claim.js";
 import forgotPasswordRouter from "./routes/passwordReset.js"
+import resetPasswordRouter from "./routes/passwordReset.js"
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.use(cors());
 app.use('/posts', postRoutes);
 app.use("/user", userRouter);
 app.use("/claim", claimRouter);
-app.use("/forgot-password", forgotPasswordRouter)
+app.use("/forgot-password", forgotPasswordRouter);
+app.use("/reset-password/:id/:token", resetPasswordRouter )
 
 const CONNECTION_URL = encodeURI(process.env.DATABASE_ACCESS);
 const PORT = process.env.PORT|| 5000;
