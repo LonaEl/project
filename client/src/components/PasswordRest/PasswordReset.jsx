@@ -47,6 +47,7 @@ const PasswordReset = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     />
+                    <button type="submit">create</button>
                 </form>
             </div>
          ) : (
