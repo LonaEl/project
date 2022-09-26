@@ -23,13 +23,6 @@ export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const signIn = (formData) => API.post('/user/signin', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
 
-//export const fetchClaims = () => API.get();
+
 export const claim = (newClaim) => API.post('/claim', newClaim);
-
-/*
-
-import axios from 'axios'
-
-const url = 'http://localhost:5000'
-export const function = () => axios.get(url);   will get all the files in the url
- */
+export const updatedPassword = (id, updatedPassword) => API.patch(`/user/${id}`,updatedPassword )

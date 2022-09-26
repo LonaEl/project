@@ -1,6 +1,6 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, COMMENT } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, COMMENT, UPDATEP } from '../constants/actionTypes';
 
-export default (state = { isLoading: true, posts: [] }, action) => {
+export default (state = { isLoading: true, posts: [], passwords: "", }, action) => {
   switch (action.type) {
     case 'START_LOADING':
       return { ...state, isLoading: true };
@@ -32,8 +32,14 @@ export default (state = { isLoading: true, posts: [] }, action) => {
       };
     case CREATE:
       return { ...state, posts: [...state.posts, action.payload] };
-    case UPDATE:
-      return { ...state, posts: state.posts.map((post) => (post._id === action.payload._id ? action.payload : post)) };
+
+     case UPDATE: 
+       return {...state, posts: state.posts.map((post) => (post._id === action.payload._id ? action.payload : post ))};
+
+       case UPDATEP: 
+       return {...state, passwords: state.passwords.map((password) => (password._id === action.payload._id ? action.payload : password ))};
+
+
     case DELETE:
       return { ...state, posts: state.posts.filter((post) => post._id !== action.payload) };
     default:

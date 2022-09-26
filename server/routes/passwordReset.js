@@ -96,7 +96,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+/* router.post("/", async (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body; //I can add an option to see if "Confirm Password" is same as password
 
@@ -126,5 +126,5 @@ router.post("/", async (req, res) => {
     res.json({ status: "Something Went Wrong" });
   }
 });
-
+ */
 export default router;

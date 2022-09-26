@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, {useState, useEffect, Fragment} from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updatepassword } from "../../actions/auth";
+
 
 const PasswordReset = () => {
     const [validUrl, setValidUrl] = useState(false);
     const [password, setPassword] = useState("");
+    const dispatch = useDispatch()
     const [msg, setMsg] = useState("");
     const param = useParams();
     const link = `http://localhost:5000/reset-password/${param.id}/${param.token}`
@@ -23,7 +27,7 @@ const PasswordReset = () => {
   }, [param, link]);
 
   
-  const handleSubmit = async(e) => {
+/*   const handleSubmit = async(e) => {
     console.log(handleSubmit);
     e.preventDefault();
     try {
@@ -33,7 +37,20 @@ const PasswordReset = () => {
     } catch (error) {
         console.log(error)
     }
+  }; */
+
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+    dispatch(updatepassword)
+    } catch (error) {
+      console.log(error)
+    }
+    window.location = "/auth"
   };
+
+
 
     return (
        <Fragment>

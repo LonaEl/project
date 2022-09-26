@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import UserModal from "../models/user.js";
 
 const secret = 'test';
+const JWT_SECRET = process.env.JWT
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -44,5 +45,29 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
     
     console.log(error);
+  }
+};
+
+export const updatepassword = async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body; //I can add an option to see if "Confirm Password" is same as password
+
+  const oldUser = await UserModal.findOne({ _id: id });
+  if (!oldUser) {
+    return res.json({ status: "Email not found" });
+  }
+  const secret = JWT_SECRET + oldUser.password;
+  try {
+    const verify = jwt.verify(token, secret);
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    await UserModal.updateOne(
+      { _id: id, }, { $set: { password: encryptedPassword, }}
+    );
+    
+
+    res.render("index", { email: verify.email, status: "verified" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "Something Went Wrong" });
   }
 };
